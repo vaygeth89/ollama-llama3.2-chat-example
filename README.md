@@ -1,13 +1,65 @@
 # Lama 3.2 as an API Using Ollama
 
-This is a simple web application that exposed a POST endpoint using flask that accepts a question to converse with
+### About
+
+This is a simple web application that exposed a POST endpoint using [Flask Framework](https://flask.palletsprojects.com/en/stable/) that accepts a question to converse with.
+
+#### Behaviour Breakdown
+
+* The program receives the user question from the POST endpoint in a form of json
+
+```json
+{
+  "question": "let's play a game"
+}
+```
+
+* Appends/Writes the request to [history.json](./files/history.json) file as role "user" with the
+  question as "content" like soo
+
+```json
+[
+  //rest of the system prompts
+  {
+    "role": "system",
+    "content": "You can also provide the user with a random joke, by saying 'Tell me a joke'. When telling a joke, keep it safe and clean, and never tell a joke that is offensive or inappropriate."
+  },
+  {
+    "role": "user",
+    "content": "let's play a game"
+  }
+]
+```
+
+* Then passes the whole [history.json](./files/history.json) file content to the model to generate the assistant response with context
+* Appends/writes the generated model response in the [history.json](./files/history.json) with the role "assistant" with
+  the generated response
+
+```json
+[
+  //rest of the system prompts
+  {
+    "role": "system",
+    "content": "You can also provide the user with a random joke, by saying 'Tell me a joke'. When telling a joke, keep it safe and clean, and never tell a joke that is offensive or inappropriate."
+  },
+  {
+    "role": "user",
+    "content": "let's play a game"
+  },
+  {
+    "role": "assistant",
+    "content": "Sure, let's play Guess the number, are you ready?"
+  }
+]
+```
 
 ### Setup
 
 * Install [Ollama](https://ollama.com/download)
 * Start Ollama
 * Run
-  ```shell 
+  ```shell
+  # this may take a while to download the model 
   ollama run llama3.2 
   ```
 * Install [Python](https://www.python.org/downloads/)
@@ -49,3 +101,7 @@ This is a simple web application that exposed a POST endpoint using flask that a
     # for example to
     app.run(debug=True, port=1234)
   ```# ollama-llama3.2-chat-example
+
+### Tweaking the model
+
+You can tweak [history.json](./files/history.json) and adjust the system prompts to suits your expected model behaviour
