@@ -48,4 +48,4 @@ This is a simple web application that exposed a POST endpoint using flask that a
     app.run(debug=True, port=3322)
     # for example to
     app.run(debug=True, port=1234)
-  ```
+  ```# ollama-llama3.2-chat-example
