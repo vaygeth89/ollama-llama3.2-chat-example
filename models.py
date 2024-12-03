@@ -45,6 +45,6 @@ class ConversationMessage:
         return cls(role=RoleType.ASSISTANT, content=content, conversation_id=conversation_id)
 
 
-class ChatQuestion(BaseModel):
+class ChatQuestion:
     question: str
     # user_id: int
