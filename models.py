@@ -47,4 +47,6 @@ class ConversationMessage:
 
 class ChatQuestion:
     question: str
-    # user_id: int
+
+    def __init__(self, question: str):
+        self.question=question;
