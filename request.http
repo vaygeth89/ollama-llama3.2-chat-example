@@ -1,7 +1,7 @@
-POST http://127.0.0.1:5000
+POST http://127.0.0.1:3322
 Content-Type: application/json
 Accept: application/json
 
 {
-    "question": "what his favourite color?"
+    "question": "let's play a game"
 }

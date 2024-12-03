@@ -1,10 +1,10 @@
-
 from ollama import chat
 
 from file_management.chat_history_file_manager import read_history, write_history
-from models import ChatConversation, ChatQuestion
+from models import ChatQuestion, ConversationMessage
 
-async def ask_question(question: ChatQuestion) -> ChatConversation:
+
+async def ask_question(question: ChatQuestion) -> ConversationMessage:
     history = await read_history()
 
     history.append(
@@ -21,8 +21,9 @@ async def ask_question(question: ChatQuestion) -> ChatConversation:
             }
         )
         await write_history(history)
-        return ChatConversation.for_assistant(
-            content=data.message.content,            
+        return ConversationMessage.for_assistant(
+            content=data.message.content,
+            conversation_id=len(history) - 1
         )
     except Exception as e:
-        return e.args
+        print("error: ", e)

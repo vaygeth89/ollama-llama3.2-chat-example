@@ -1,53 +1,50 @@
 import datetime
-from pydantic import BaseModel
-
-#define enum for conversation role
 from enum import Enum
+
 
 class RoleType(Enum):
     SYSTEM = "system"
     ASSISTANT = "assistant"
     USER = "user"
 
-class ConversationMessage(BaseModel):
+    def __str__(self):
+        return self.value
+
+    def to_dict(self):
+        return {
+            "role": self.value
+        }
+
+
+class ConversationMessage:
     role: RoleType
     content: str
-    created_at: str = datetime.now().isoformat()
-    
-    def __init__(self, role:RoleType, content:str):
+    created_at: str = datetime.datetime.now().isoformat()
+    conversation_id: int
+
+    def __init__(self, role: RoleType, content: str, conversation_id: int):
+        super().__init__()
         self.role = role
         self.content = content
+        self.conversation_id = conversation_id
+
+    def to_dict(self):
+        return {
+            "role": self.role.value,
+            "content": self.content,
+            "created_at": self.created_at,
+            "conversation_id": self.conversation_id
+        }
+
     @classmethod
-    def for_user(cls, content:str):
-        return cls(role=RoleType.USER, content=content)
+    def for_user(cls, content: str, conversation_id: int):
+        return cls(role=RoleType.USER, content=content, conversation_id=conversation_id)
+
     @classmethod
-    def for_system(cls, content:str):
-        return cls(role=RoleType.SYSTEM, content=content)
-    @classmethod
-    def for_assistant(cls, content:str):
-        return cls(role=RoleType.ASSISTANT, content=content)
+    def for_assistant(cls, content: str, conversation_id: int):
+        return cls(role=RoleType.ASSISTANT, content=content, conversation_id=conversation_id)
+
 
 class ChatQuestion(BaseModel):
     question: str
     # user_id: int
-    
-# Define the ChatConversation class
-class ChatConversation(ConversationMessage):
-    def __init__(self, content:str,role:RoleType, thread_id:int, conversation_id:int):
-        self.content = content
-        self.role = role
-        self.conversation_id = conversation_id
-    conversation_id: int
-    
-    #class methods for each role
-    @classmethod
-    def for_user(cls, content:str, thread_id:int, conversation_id:int):
-        return cls(content=content, role=RoleType.USER, thread_id=thread_id, conversation_id=conversation_id)
-    
-    @classmethod
-    def for_system(cls, content:str, thread_id:int, conversation_id:int):
-        return cls(content=content, role=RoleType.SYSTEM, thread_id=thread_id, conversation_id=conversation_id)
-    
-    @classmethod
-    def for_assistant(cls, content:str, thread_id:int, conversation_id:int):
-        return cls(content=content, role=RoleType.ASSISTANT, thread_id=thread_id, conversation_id=conversation_id)
